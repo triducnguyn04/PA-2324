@@ -1,64 +1,38 @@
-import matplotlib as mpl
-import math
 import scipy
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 import os
 
 def refine(filename):
+    count=0
     dir_path = os.path.dirname(os.path.realpath(__file__))
+    x_axis=[]
+    y_axis=[]
     try:
         f = open(dir_path+'/raw_data/'+filename, "r")
-        path=filename[:-4]+'refined.txt'
-        try:
-            g = open(path, "x")
-            g.close()
-        except:
-            print("The file already exists")
-            return -1
-        g = open(path, "a")
-        count=0
         for x in f:
             if count>=4:
                 a=x.split(':')
-                g.write(a[-1])
+                b=a[-1].split(',')
+                c=float(b[1])
+                d=float(b[0])
+                y_axis.append(c)
+                x_axis.append(d)
             else:
                 count+=1
         f.close()
-        g.close()
     except:
         print("The file doesn't exist")
         return -1
-    g = open(path, "r")
-    x_axis=[]
-    y_axis=[]
-    for x in g:
-        a=x.split(',')
-        c=float(a[1])
-        d=float(a[0])
-        try:
-            y_axis.append(c)
-            x_axis.append(d)
-        except:
-            pass
-    g.close()
     temp=x_axis[0]
     for i in range(len(x_axis)):
         x_axis[i]=x_axis[i]-temp
-    
-    #delete the draft file
-    try:
-        os.remove(path)
-    except:
-        pass
     return (x_axis,y_axis)
 
 def visualize(filename):
     try:
         data=refine(filename)
-        #visualization
-        fig, ax = plt.subplots()  # Create a figure containing a single axes.
+        fig, ax = plt.subplots()     #Create a figure containing a single axes.
         ax.set_title('Time-amplitude plot')
         plt.xlabel("Time elapsed (s)")
         plt.ylabel("Voltage (V)")
@@ -75,9 +49,8 @@ def all_fft(filename):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     try:
         data = refine(filename)
-        N = len(data[0])           #number of sample
+        N = len(data[0])             #number of sample
         T = data[0][-1]/(N)          #sampling resolution
-        #visualization
         fig, ax = plt.subplots(2, 2, layout='constrained')
         
         ax[0][0].set_title('Time-amplitude plot')
@@ -118,13 +91,3 @@ def all_fft(filename):
     except:
         print("The file doesn't exist")
     return 0
-
-
-
-
-
-
-
-
-
-
