@@ -71,46 +71,6 @@ def visualize(filename):
         return 0
     return 0
 
-def fft(filename):
-    try:
-        data = refine(filename)
-        N = len(data[0])           #number of sample
-        T = data[0][-1]/(N)          #sampling resolution
-        #visualization
-        fig,ax = plt.subplots()  # Create a figure containing a single axes.
-        ax.set_title('Fast Fourier transform plot')
-        plt.xlabel("Frequency (Hz)")
-        plt.ylabel("Amplitude")
-        yf = scipy.fft.fft(data[1])
-        xf = scipy.fft.fftfreq(N, T)
-        xf = scipy.fft.fftshift(xf)
-        yf = scipy.fft.fftshift(yf)
-        ax.plot(xf, np.abs(yf)/N)
-        ax.grid(True)
-        plt.show()
-    except:
-        print("The file doesn't exist")
-    return 0
-
-def rfft(filename):
-    try:
-        data = refine(filename)
-        N = len(data[0])           #number of sample
-        T = data[0][-1]/(N)          #sampling resolution
-        #visualization
-        fig,ax = plt.subplots()  # Create a figure containing a single axes.
-        ax.set_title('Real fast Fourier transform plot')
-        plt.xlabel("Frequency (Hz)")
-        plt.ylabel("Amplitude")
-        yf = scipy.fft.rfft(data[1])
-        xf = scipy.fft.rfftfreq(N, T)
-        ax.plot(xf, np.abs(yf)/N)
-        ax.grid(True)
-        plt.show()
-    except:
-        print("The file doesn't exist")
-    return 0
-
 def all_fft(filename):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     try:
